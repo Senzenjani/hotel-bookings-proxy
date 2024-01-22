@@ -14,11 +14,12 @@ class Api::V1::ProxyController < ApplicationController
         request_method = params[:method]&.upcase || 'GET' # Default to GET if method is not specified
 
         request_params = params[:proxy] || {} # Use the "proxy" parameters directly as the request body
+
     
         # Make the request to the external API using HTTParty
         response = case request_method
                    when 'GET'
-                     HTTParty.get(target_url, headers: request_headers(token), query: request_params)
+                     HTTParty.get(target_url, headers: request_headers(token), body: request_params.to_json)
                    when 'POST'
                      HTTParty.post(target_url, headers: request_headers(token), body: request_params.to_json)
                    when 'PUT'
